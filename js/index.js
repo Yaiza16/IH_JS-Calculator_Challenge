@@ -1,7 +1,7 @@
 const boxText = document.getElementById('box-text')
 const buttons = document.querySelectorAll('.button')
 const buttonsContainer = document.getElementById('buttons-container');
-boxText.textContent = "0"
+boxText.textContent = 0;
 
 let number1 = false;;
 let operatorsArray = []
@@ -27,7 +27,7 @@ buttonsContainer.addEventListener('click', e =>{
 })
 
 const printNumber = el =>{
-    if (boxText.textContent == "0"){
+    if (boxText.textContent == "0" || boxText.textContent == 'Error'){
         boxText.textContent = el.dataset.number;
     } else{
         boxText.textContent += el.dataset.number
@@ -48,18 +48,13 @@ const doOperation = el =>{
         boxText.textContent += operator;
         operatorsArray.push(operator)
     }
-
-    console.log(numbersArray);
-    console.log(operatorsArray);
 }
 
 const giveResult = el =>{
     if (el.dataset.result == "equals"){
-
         numbersArray.push(getLastNumber())
-        console.log(numbersArray)
 
-        checkIfMultiplicationAndDivision()
+        checkIfMultiplicationAndDivision();
 
         let positionOperator = 0;
         operatorsArray.forEach( operator =>{
@@ -72,7 +67,7 @@ const giveResult = el =>{
             }
         })
 
-        boxText.textContent = resultado;
+        Number.isNaN(resultado) ? boxText.textContent = 'Error' : boxText.textContent = resultado;
         operatorsArray = []
         numbersArray = []
 
@@ -103,7 +98,8 @@ const chooseOperation = (operator, number1, number2) =>{
 }
 
 
-/* ---------------------------------------------------------- */
+
+
 
 
 const getLastNumber = () =>{
@@ -111,6 +107,7 @@ const getLastNumber = () =>{
     let newNumber = parseInt(boxText.textContent.slice(positionLastOperator+1))
     return newNumber
 }
+
 
 const checkIfMultiplicationAndDivision = () =>{
     let isMultiplicationOrDivision = true;
@@ -125,20 +122,15 @@ const checkIfMultiplicationAndDivision = () =>{
                 }
             }
         }
-
         if (operatorsArray.includes("/")){
             for (i=0; i<operatorsArray.length; i++){
                 if (operatorsArray[i] == "/"){
                     positionDivisions.push(i)
                 }
             }
-
         }
 
-        console.log(positionMultiplications)
-        console.log(positionDivisions)
 
-    
         if (positionMultiplications.length >0 || positionDivisions.length >0){
             isMultiplicationOrDivision = true
     
@@ -151,7 +143,6 @@ const checkIfMultiplicationAndDivision = () =>{
                     positionDivisions.shift()
                 }
             } else if (positionMultiplications.length>0){
-                console.log("Posición multiplicación :" +positionMultiplications)
                 runMultiplication(positionMultiplications)
                 positionMultiplications.shift()
             } else{
@@ -162,57 +153,17 @@ const checkIfMultiplicationAndDivision = () =>{
             isMultiplicationOrDivision = false;
         }
     }
-
-    console.log(numbersArray)
-    console.log(operatorsArray)
-
-
-    // if (positionMultiplications.length >0 || positionDivisions.length >0){
-    //     isMultiplicationOrDivision = true
-
-    //     if (positionMultiplications.length >0 && positionDivisions.length >0){
-    //         runOperation(positionMultiplications, positionDivisions);
-    //     } else if (positionMultiplications.length>0){
-    //         runMultiplication(positionMultiplications)
-    //     } else{
-    //         runDivision(positionDivisions)
-    //     }
-    // }
-
-
-    // if (isMultiplicationOrDivision){
-    //     runOperation(positionMultiplications, positionDivisions);
-    // }
-
-    // console.log(positionMultiplications)
-    // runMultiplication(positionMultiplications)
-    // runOperation(positionMultiplications, positionDivisions)
 }
 
-const runOperation = (multiplications, divisions) =>{
-    if (multiplications[0]<divisions[0]){
-        // let result = chooseOperation("x", numbersArray[multiplications[0]], numbersArray[multiplications[0]+1])
-        // console.log(result)
-        // numbersArray = numbersArray.splice(multiplications[0], 2, result)
-        // console.log(numbersArray)
-        runMultiplication(multiplications)
-    }else{
-        runDivision(divisions)
-    }
-}
 
 const runMultiplication = (multiplication) =>{
     console.log(numbersArray[multiplication[0]])
     console.log(numbersArray[multiplication[0]+1])
     let result = chooseOperation("x", numbersArray[multiplication[0]], numbersArray[multiplication[0]+1])
-    console.log("resultado multiplicación: " +result)
-    console.log ("Comienzo multiplicación: " + multiplication[0])
     numbersArray.splice(multiplication[0], 2, result)
     operatorsArray.splice(multiplication[0], 1)
     multiplication.shift()
-    console.log(numbersArray)
-    console.log(operatorsArray)
-    console.log(multiplication)
+
 }
 
 const runDivision = division =>{
@@ -220,6 +171,4 @@ const runDivision = division =>{
     numbersArray.splice(division[0], 2, result)
     operatorsArray.splice(division[0], 1)
     division.shift()
-    console.log(numbersArray)
-    console.log(operatorsArray)
 }
