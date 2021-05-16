@@ -57,15 +57,20 @@ const giveResult = el =>{
         checkIfMultiplicationAndDivision();
 
         let positionOperator = 0;
-        operatorsArray.forEach( operator =>{
-            if (positionOperator == 0){
-                resultado = chooseOperation(operator, numbersArray[0], numbersArray[1])
-                positionOperator ++;
-            }else{
-                resultado = chooseOperation(operator, resultado, numbersArray[positionOperator+1] )
-                positionOperator++
-            }
-        })
+        if (operatorsArray.length==0){
+            resultado = numbersArray[0];
+        }else{
+            operatorsArray.forEach( operator =>{
+                if (positionOperator == 0){
+                    resultado = chooseOperation(operator, numbersArray[0], numbersArray[1])
+                    positionOperator ++;
+                }else{
+                    resultado = chooseOperation(operator, resultado, numbersArray[positionOperator+1] )
+                    positionOperator++
+                }
+            })
+        }
+        
 
         Number.isNaN(resultado) ? boxText.textContent = 'Error' : boxText.textContent = resultado;
         operatorsArray = []
@@ -119,6 +124,7 @@ const checkIfMultiplicationAndDivision = () =>{
             for (i=0; i<operatorsArray.length; i++){
                 if (operatorsArray[i] == "x"){
                     positionMultiplications.push(i)
+                    console.log(positionMultiplications)
                 }
             }
         }
@@ -161,9 +167,9 @@ const runMultiplication = (multiplication) =>{
     console.log(numbersArray[multiplication[0]+1])
     let result = chooseOperation("x", numbersArray[multiplication[0]], numbersArray[multiplication[0]+1])
     numbersArray.splice(multiplication[0], 2, result)
+    console.log(numbersArray)
     operatorsArray.splice(multiplication[0], 1)
     multiplication.shift()
-
 }
 
 const runDivision = division =>{
