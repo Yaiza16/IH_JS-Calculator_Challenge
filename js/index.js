@@ -17,7 +17,7 @@ buttonsContainer.addEventListener('click', e =>{
         }
 
         if (button.dataset.operation){
-            doOperation(button)
+            saveOperation(button)
         }
 
         if (button.dataset.result){
@@ -34,7 +34,7 @@ const printNumber = el =>{
     }
 }
 
-const doOperation = el =>{
+const saveOperation = el =>{
     let operator = el.textContent;
 
     if (number1 == false){
